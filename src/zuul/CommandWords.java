@@ -19,6 +19,11 @@ public class CommandWords
     {
         // nada a fazer no momento...
     }
+    
+    public String getCommandList()
+    {
+        return String.join(" ", VALID_COMMANDS);
+    }
 
     /**
      * Checa se uma string é uma palavra válida. 
