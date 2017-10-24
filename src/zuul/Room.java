@@ -1,5 +1,7 @@
 package zuul;
 
+import java.util.HashMap;
+
 /**
  * Class Room - a room in an adventure game.
  *
@@ -17,10 +19,7 @@ package zuul;
 public class Room 
 {
     public String description;
-    private Room northExit;
-    private Room southExit;
-    private Room eastExit;
-    private Room westExit;
+    private HashMap<String, Room> exits;
 
     /**
      * Create a room described "description". Initially, it has
@@ -31,26 +30,18 @@ public class Room
     public Room(String description) 
     {
         this.description = description;
+        exits = new HashMap<>();
     }
 
     /**
      * Define the exits of this room.  Every direction either leads
      * to another room or is null (no exit there).
-     * @param north The north exit.
-     * @param east The east east.
-     * @param south The south exit.
-     * @param west The west exit.
+     * @param direction A direção da saída.
+     * @param neighbor A sala vizinha.
      */
-    public void setExits(Room north, Room east, Room south, Room west) 
+    public void setExit(String direction, Room neighbor) 
     {
-        if(north != null)
-            northExit = north;
-        if(east != null)
-            eastExit = east;
-        if(south != null)
-            southExit = south;
-        if(west != null)
-            westExit = west;
+        exits.put(direction, neighbor);
     }
 
     /**
@@ -67,21 +58,8 @@ public class Room
      * @return A sala 
      */
     public Room getExit(String direction)
-    {
-        if(direction.equals("norte")) {
-            return northExit;
-        }
-        if(direction.equals("leste")) {
-            return eastExit;
-        }
-        if(direction.equals("sul")) {
-            return southExit;
-        }
-        if(direction.equals("oeste")) {
-            return westExit;
-        }
-        
-        return null;
+    {    
+        return exits.get(direction);
     }
     
     /**
@@ -91,20 +69,23 @@ public class Room
      */
     public String getExitString()
     {
-        String exitString = "Saídas: ";
-        if(northExit != null) {
-            exitString += "norte ";
-        }
-        if(eastExit != null) {
-            exitString += "leste ";
-        }
-        if(southExit != null) {
-            exitString += "sul ";
-        }
-        if(westExit != null) {
-            exitString += "oeste ";
+        String exitString = "Saídas:";
+        for(String exit : exits.keySet()) {
+            exitString += " " + exit;
         }
         return exitString;
     }
-
+    
+    /**
+     * Retorna uma descrição longa dessa sala.
+     * Na forma
+     *   Você está na cozinha.
+     *   Saídas: norte oeste
+     * @return Uma descrição da sala, incluindo saídas.
+     */
+    public String getLongDescription()
+    {
+        return "Você está " + description + ".\n" +
+                getExitString();
+    }
 }
