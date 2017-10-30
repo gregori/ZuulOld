@@ -18,19 +18,32 @@ import java.util.HashMap;
  */
 public class Room 
 {
-    public String description;
+    private String description;
     private HashMap<String, Room> exits;
+    private Item item;
 
     /**
      * Create a room described "description". Initially, it has
      * no exits. "description" is something like "a kitchen" or
      * "an open court yard".
      * @param description The room's description.
+     * @param item
      */
     public Room(String description) 
     {
         this.description = description;
         exits = new HashMap<>();
+        this.item = null;
+    }
+    
+    public Room(String description, Item item)
+    {
+        this(description);
+        this.item = item;    
+    }
+    
+    public void setItem(Item item) {
+        this.item = item;
     }
 
     /**
@@ -85,7 +98,12 @@ public class Room
      */
     public String getLongDescription()
     {
+        String itemStr = (item != null) 
+                ? "Que contém " + item.getDescription() + ".\n"
+                : "";
+        
         return "Você está " + description + ".\n" +
+                itemStr + 
                 getExitString();
     }
 }
